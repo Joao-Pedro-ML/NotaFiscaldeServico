@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nota Fiscal de Serviço</title>
+    <!--Estilo básico-->
+    <style> 
+        body {
+            font-family: Arial, sans-serif;
+        }
+        form {
+            margin-bottom: 2em;
+        }
+        label {
+            display: block;
+            margin-top: 1em;
+        }
+        input[type="text"], input[type="number"], input[type="datetime-local"] {
+            width: 100%; 
+            padding: .5em;
+            margin-top: .5em;
+        }
+        input[type="submit"] {
+            margin-top: 1em;
+            padding: .5em 1em;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        #invocar {
+            border: 1px solid black;
+            padding: 1em;
+            margin-top: 1em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nota Fiscal de Serviço</h1>
+    <form id="invocar-form"> <!--Formulário para entrada dos dados-->
+        <label for="nomeEmpresa">Nome da Empresa:</label><br>
+        <input type="text" id="nomeEmpresa" name="nomeEmpresa"><br>
+        <label for="razaoSocial">Razão Social:</label><br>
+        <input type="text" id="razaoSocial" name="razaoSocial"><br>
+        <label for="cnpj">CNPJ:</label><br>
+        <input type="text" id="cnpj" name="cnpj" maxlength="18" onkeypress="mascaraCNPJ(this, event)"><br>
+        <label for="naturezaTransacao">Natureza da Transação:</label><br>
+        <input type="text" id="naturezaTransacao" name="naturezaTransacao"><br>
+        <label for="descricaoProdutos">Descrição dos Produtos ou Serviços:</label><br>
+        <input type="text" id="descricaoProdutos" name="descricaoProdutos"><br>
+        <label for="dataHora">Data e Hora:</label><br>
+        <input type="datetime-local" id="dataHora" name="dataHora"><br>
+        <input type="submit" value="Gerar Nota Fiscal">
+    </form>
+    <h2>Nota Fiscal</h2>
+    <div id="invocar"></div>
+    <script> 
+        // Função para adicionar uma máscara ao campo CNPJ
+        function mascaraCNPJ(campo, evento) {
+            var tecla = (!evento) ? window.event.keyCode : evento.which;
+            var valor = campo.value;
+            if((tecla > 47 && tecla < 58)) {
+                switch(valor.length) {
+                    case 2:
+                    case 6:
+                        campo.value += '.';
+                        break;
+                    case 10:
+                        campo.value += '/';
+                        break;
+                    case 15:
+                        campo.value += '-';
+                        break;
+                }
+            } else {
+                if(tecla != 8) {
+                    return false;
+                }
+            }
+        }
+        // Função JavaScript para receber os dados inseridos e mostrar a nota fiscal na tela
+        document.getElementById('invocar-form').addEventListener('submit', function(event){
+            event.preventDefault();
+            var nomeEmpresa = document.getElementById('nomeEmpresa').value;
+            var razaoSocial = document.getElementById('razaoSocial').value;
+            var cnpj = document.getElementById('cnpj').value;
+            var naturezaTransacao = document.getElementById('naturezaTransacao').value;
+            var descricaoProdutos = document.getElementById('descricaoProdutos').value;
+            var dataHora = document.getElementById('dataHora').value;
+            document.getElementById('invocar').innerHTML = '<strong>Nome da Empresa:</strong> ' + nomeEmpresa + '<br>' +
+            '<strong>Razão Social:</strong> ' + razaoSocial + '<br>' + '<strong>CNPJ:</strong> ' + cnpj + '<br>' +
+            '<strong>Natureza da Transação:</strong> ' + naturezaTransacao + '<br>' + '<strong>Descrição dos Produtos ou Serviços:</strong> ' + descricaoProdutos + '<br>' +
+            '<strong>Data e Hora:</strong> ' + dataHora; 
+        });
+    </script>
+</body>
+</html>
